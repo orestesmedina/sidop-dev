@@ -1,0 +1,70 @@
+﻿//Instalamos el servidor Web Apache:
+
+ sudo apt-get install apache2 -y
+
+//instalar php
+sudo apt-get install php5 libapache2-mod-php5 libapache2-mod-auth-mysql php5-mysql -y
+
+//Reiniciamos el servidor web:
+sudo /etc/init.d/apache2 restart
+
+sudo chown -R orestes:www-data /var/www/html
+sudo chmod -R 755 /var/www/html
+
+//sudo gedit /var/www/info.php
+<?php phpinfo(); ?>
+
+//instalar mysql
+sudo apt-get install mysql-server mysql-client -y
+
+sudo apt-get install php5-mysql php5-curl php5-gd php5-idn php-pear php5-imagick php5-imap php5-mcrypt php5-memcache php5-ming php5-ps php5-pspell php5-recode php5-snmp php5-sqlite php5-tidy php5-xmlrpc php5-xsl -y
+
+
+//Instalamos la interfaz web para manejar el MySQL y sus bases de datos, phpMyAdmin:
+sudo apt-get install phpmyadmin -y 
+
+sudo gedit /etc/apache2/httpd.conf 
+Include /etc/phpmyadmin/apache.conf 
+sudo /etc/init.d/apache2 restart 
+sudo ln -s /usr/share/phpmyadmin /var/www/html 
+
+
+
+
+
+
+//descargar e instalar composer
+
+php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php
+php -r "if (hash('SHA384', file_get_contents('composer-setup.php')) === '41e71d86b40f28e771d4bb662b997f79625196afcca95a5abf44391188c695c6c1456e16154c75a211d238cc3bc5cb47') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+php composer-setup.php
+php -r "unlink('composer-setup.php');"
+
+
+// hacer composer global
+
+sudo mv composer.phar /usr/local/bin/composer
+
+
+//Add composer's bin directory to the system path by placing export 
+PATH="$HOME/.composer/vendor/bin:$PATH" 
+//~/.bashrc (Linux users).
+vi ~/.bashrc
+//Install latest stable Drush: 
+composer global require drush/drush.
+//Verify that Drush works: 
+drush status
+
+//descargar drupal via drush
+
+cd /var/www/html/
+drush dl drupal
+
+
+//instalar y configurar drupal mediante drush
+drush si --db-url=mysql://root:orestes@localhost:3306/drupal
+
+
+//cambiar contrasenia del usuario 
+drush uli
+drush user-password admin --password="orestes"
